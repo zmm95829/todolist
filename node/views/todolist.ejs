@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    table{
+      border: 1px solid blue;
+    }
+    </style>
+    <script src="/jquery-3.4.1.min.js"></script>
+    <script>
+      /**************************************时间格式化处理************************************/
+function dateFtt(fmt,date) 
+{
+ var o = { 
+ "M+" : date.getMonth()+1,     //月份 
+ "d+" : date.getDate(),     //日 
+ "h+" : date.getHours(),     //小时 
+ "m+" : date.getMinutes(),     //分 
+ "s+" : date.getSeconds(),     //秒 
+ "q+" : Math.floor((date.getMonth()+3)/3), //季度 
+ "S" : date.getMilliseconds()    //毫秒 
+ }; 
+ if(/(y+)/.test(fmt)) 
+ fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+ for(var k in o) 
+ if(new RegExp("("+ k +")").test(fmt)) 
+ fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+ return fmt; 
+}
+    $(function() {
+      const array = $(".date"); // document.getElementsByClassName("date");
+      console.log(array[0])
+      console.log((new Date()).toString())
+      for(let i = 0; i < array.length; i++) {
+      console.log(array[0])
+        const item = array[i]
+      console.log(item)
+        // console.log($(item).html())
+        $(item).html($(item).html() && new Date($(item).html()).toLocaleString() || "")
+      }
+    })
+    </script>
+  </head>
+  <body>
+    <form action="/" method="POST">
+      
+      任务名称:<input type="text" name="name" placeholder="任务名称">
+      任务描述:<input type="textarea" name="desc" placeholder="任务描述">
+      <!-- 0:待办，1：进行中，2：测试中，3：待合并，4：已完成，5：已关闭 -->
+      任务进度:
+      <input type="radio" name="progressType" value=0>待办
+      <input type="radio" name="progressType" value=1>进行中
+      <input type="radio" name="progressType" value=2>测试中
+      <input type="radio" name="progressType" value=3>待合并
+      <input type="radio" name="progressType" value=4>已完成
+      <input type="radio" name="progressType" value=5>已关闭
+      <input type="radio" name="progressType" value=0>待办
+      <input type="radio" name="progressType" value=0>待办
+      任务分类：
+      <input type="text" name="classification" placeholder="任务分类">
+      <input type="submit" value="提交">
+    </form>
+    <table border="1" cellspacing="0">
+        <tr>
+          <th>任务名称</th>
+          <th>任务分类</th>
+          <th>任务进度</th>
+          <th>任务描述</th>
+          <th>创建时间</th>
+          <th>修改时间</th>
+        </tr>
+      <% todolist.forEach(function(item) { %>
+        <tr>
+          <td><%= item.name %></td>
+          <td><%= item.classification %></td>
+          <td><%= item.progressType %></td>
+          <td><%= item.desc %></td>
+          <td class="date"><%= item.created %></td>
+          <td class="date"><%= item.updated %></td>
+        </tr>
+        <% }) %>
+      </table>
+  </body>
+</html>
